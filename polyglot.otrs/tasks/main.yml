@@ -1,0 +1,41 @@
+---
+- name: Fetch installed OTRS version
+  command: cat /opt/RELEASE |grep VERSION
+  register: otrs_release
+  failed_when: false
+  changed_when: false
+
+- include: download.yml
+  when: not otrs_version in otrs_release.stdout
+
+- name: change pwd to /opt
+  become: yes
+  command: cd /root
+ 
+- name: install otrs 
+  yum: name={{ otrs_version }}.noarch.rpm state=present
+
+- name: install perl modules
+  yum: name={{ item }}
+  with_items:
+     - perl(Apache2::Reload) 
+     - perl(Crypt::Eksblowfish::Bcrypt)
+     - perl(Encode::HanExtra)
+     - perl(JSON::XS)          
+     - perl(Mail::IMAPClient) 
+     - perl(ModPerl::Util)
+     - perl(Text::CSV_XS) 
+     - perl(YAML::XS)
+     - perl(DBD::Pg)
+
+- name: start httpd
+  service: name=httpd enabled=yes
+
+- name: restart httpd
+  service: name=httpd state=restarted
+
+
+
+#  notify:
+ #    - start httpd
+  #   - restart httpd

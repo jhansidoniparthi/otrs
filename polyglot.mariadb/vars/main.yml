@@ -1,0 +1,5 @@
+---
+# vars file for polyglot.mariadb
+db_name: otrs
+db_user: otrs
+db_password: default123

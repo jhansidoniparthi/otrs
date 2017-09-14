@@ -1,0 +1,8 @@
+---
+- name: download OTRS
+  command: wget http://ftp.otrs.org/pub/otrs/RPMS/rhel/7/{{ otrs_version }}.noarch.rpm 
+#  args:
+ #    chdir: /opt
+#     creates: /opt/otrs/{{ otrs_version }}.noarch.rpm
+ 
+
